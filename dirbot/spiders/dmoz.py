@@ -21,14 +21,14 @@ class DmozSpider(Spider):
         @scrapes name
         """
         sel = Selector(response)
-        sites = sel.xpath('//ul[@class="directory-url"]/li')
+        sites = sel.xpath('//div[@class="title-and-desc"]')
         items = []
 
         for site in sites:
             item = Website()
-            item['name'] = site.xpath('a/text()').extract()
+            item['name'] = site.xpath('a/div/text()').extract()
             item['url'] = site.xpath('a/@href').extract()
-            item['description'] = site.xpath('text()').re('-\s[^\n]*\\r')
+            item['description'] = site.xpath('div[@class="site-descr "]/text()').extract()
             items.append(item)
 
         return items
